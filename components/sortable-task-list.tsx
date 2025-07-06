@@ -1,4 +1,3 @@
-
 'use client';
 
 import React, { useState } from 'react';
@@ -38,23 +37,34 @@ export function SortableTaskList({ tasks: initialTasks }: SortableTaskListProps)
   const handleDragEnd = async (event: DragEndEvent) => {
     const { active, over } = event;
 
-    if (active.id !== over?.id) {
-      setTasks((items) => {
-        const oldIndex = items.findIndex((item) => item.id === active.id);
-        const newIndex = items.findIndex((item) => item.id === over?.id);
-        const newOrder = arrayMove(items, oldIndex, newIndex);
+    if (over && active.id !== over.id) {
+      const originalTasks = [...tasks];
+      const oldIndex = tasks.findIndex((item) => item.id === active.id);
+      const newIndex = tasks.findIndex((item) => item.id === over.id);
+      
+      if (oldIndex === -1 || newIndex === -1) {
+        return;
+      }
 
-        // Prepare data for database update
-        const updatedTaskOrder = newOrder.map((task, index) => ({
-          id: task.id,
-          order: index,
-        }));
+      const newOrder = arrayMove(tasks, oldIndex, newIndex);
+      
+      // Optimistic UI update
+      setTasks(newOrder);
 
+      const updatedTaskOrder = newOrder.map((task, index) => ({
+        id: task.id,
+        order: index,
+      }));
+
+      try {
         // Call server action to update the database
-        updateTaskOrder(updatedTaskOrder);
-
-        return newOrder;
-      });
+        await updateTaskOrder(updatedTaskOrder);
+      } catch (error) {
+        // If the server action fails, revert the UI change
+        console.error("Failed to update task order:", error);
+        setTasks(originalTasks);
+        // Optionally, show an error message to the user
+      }
     }
   };
 
