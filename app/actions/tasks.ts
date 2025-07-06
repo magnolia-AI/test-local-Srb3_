@@ -75,6 +75,27 @@ export async function deleteTask(id: string) {
     return { success: true }
   } catch (error) {
 
+export async function updateTaskOrder(
+  tasks: { id: string; order: number }[]
+) {
+  try {
+    await prisma.$transaction(
+      tasks.map((task) =>
+        prisma.task.update({
+          where: { id: task.id },
+          data: { order: task.order },
+        })
+      )
+    );
+    revalidatePath('/');
+    return { success: true };
+  } catch (error) {
+    console.error('Error updating task order:', error);
+    return { success: false, error: 'Failed to update task order' };
+  }
+}
+
+
 export async function updateTaskOrder(tasks: { id: string; order: number }[]) {
   try {
     await prisma.$transaction(
