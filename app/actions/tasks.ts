@@ -42,6 +42,16 @@ export async function createTask(title: string) {
   }
 }
 
+export async function createTaskFromForm(formData: FormData) {
+  const title = formData.get('title') as string
+  
+  if (!title || !title.trim()) {
+    return { success: false, error: 'Title is required' }
+  }
+  
+  return await createTask(title.trim())
+}
+
 export async function updateTask(id: string, data: Partial<Task>) {
   try {
     const task = await prisma.task.update({
@@ -85,3 +95,4 @@ export async function updateTaskOrder(tasks: { id: string; order: number }[]) {
     return { success: false, error: 'Failed to update task order' }
   }
 }
+

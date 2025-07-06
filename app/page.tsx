@@ -1,4 +1,4 @@
-import { getTasks, createTask } from '@/app/actions/tasks'
+import { getTasks, createTaskFromForm } from '@/app/actions/tasks'
 import { Card, CardContent } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
@@ -21,12 +21,7 @@ export default async function Home() {
           <h1 className="text-3xl font-bold text-center mb-6">Todo App</h1>
 
           {/* Task Input Form */}
-          <form action={async (formData: FormData) => {
-            const title = formData.get('title') as string
-            if (title.trim()) {
-              await createTask(title)
-            }
-          }} className="flex gap-2 mb-6">
+          <form action={createTaskFromForm} className="flex gap-2 mb-6">
             <Input
               name="title"
               placeholder="Add a new task..."
@@ -54,6 +49,8 @@ export default async function Home() {
     </div>
   )
 }
+
+
 
 
 
