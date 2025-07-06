@@ -2,7 +2,7 @@ import { getTasks, createTask } from '@/app/actions/tasks'
 import { Card, CardContent } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
-import { TaskItem } from '@/components/task-item'
+import { SortableTaskList } from '@/components/sortable-task-list'
 
 export default async function Home() {
   const { tasks, success } = await getTasks()
@@ -41,9 +41,7 @@ export default async function Home() {
             {tasks.length === 0 ? (
               <p className="text-center text-muted-foreground">No tasks yet. Add one above!</p>
             ) : (
-              tasks.map((task) => (
-                <TaskItem key={task.id} task={task} />
-              ))
+              <SortableTaskList tasks={tasks} />
             )}
           </div>
 
@@ -57,4 +55,6 @@ export default async function Home() {
     </div>
   )
 }
+
+
 
