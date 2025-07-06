@@ -1,4 +1,3 @@
-'use client'
 import { getTasks, createTask } from '@/app/actions/tasks'
 import { Card, CardContent } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
@@ -55,6 +54,7 @@ export default async function Home() {
     </div>
   )
 }
+
 
 
 
