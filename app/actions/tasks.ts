@@ -11,10 +11,10 @@ export async function getTasks() {
         order: 'asc',
       },
     })
-    return { success: true, tasks }
+    return tasks
   } catch (error) {
     console.error('Error fetching tasks:', error)
-    return { success: false, error: 'Failed to fetch tasks' }
+    throw new Error('Failed to fetch tasks')
   }
 }
 
@@ -74,60 +74,23 @@ export async function deleteTask(id: string) {
     revalidatePath('/')
     return { success: true }
   } catch (error) {
-
-export async function updateTaskOrder(
-  tasks: { id: string; order: number }[]
-) {
-  try {
-    await prisma.$transaction(
-      tasks.map((task) =>
-        prisma.task.update({
-          where: { id: task.id },
-          data: { order: task.order },
-        })
-      )
-    );
-    revalidatePath('/');
-    return { success: true };
-  } catch (error) {
-    console.error('Error updating task order:', error);
-    return { success: false, error: 'Failed to update task order' };
-  }
-}
-
-
-export async function updateTaskOrder(tasks: { id: string; order: number }[]) {
-  try {
-    await prisma.$transaction(
-      tasks.map((task) =>
-        prisma.task.update({
-          where: { id: task.id },
-          data: { order: task.order },
-        })
-      )
-    );
-    revalidatePath('/');
-    return { success: true };
-  } catch (error) {
-    console.error('Error updating task order:', error);
-    return { success: false, error: 'Failed to update task order' };
-  }
-}
-
     console.error('Error deleting task:', error)
     return { success: false, error: 'Failed to delete task' }
   }
 }
 
-export async function updateTaskOrder(tasks: { id: string; order: number }[]) {
+export async function updateTaskOrder(
+  updatedTasks: { id: string; order: number }[]
+) {
   try {
-    const transaction = tasks.map((task) =>
-      prisma.task.update({
-        where: { id: task.id },
-        data: { order: task.order },
-      })
+    await prisma.$transaction(
+      updatedTasks.map((task) =>
+        prisma.task.update({
+          where: { id: task.id },
+          data: { order: task.order },
+        })
+      )
     )
-    await prisma.$transaction(transaction)
     revalidatePath('/')
     return { success: true }
   } catch (error) {

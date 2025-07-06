@@ -1,19 +1,10 @@
-import { getTasks, createTaskFromForm } from '@/app/actions/tasks'
+import { createTaskFromForm } from '@/app/actions/tasks'
 import { Card, CardContent } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { SortableTaskList } from '@/components/sortable-task-list'
 
-export default async function Home() {
-  const { tasks, success } = await getTasks()
-
-  if (!success || !tasks) {
-    return <div className="text-center py-10">Failed to load tasks.</div>
-  }
-
-  const activeTasks = tasks.filter(task => !task.completed).length
-  const completedTasks = tasks.filter(task => task.completed).length
-
+export default function Home() {
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-background text-foreground p-4">
       <Card className="w-full max-w-md shadow-lg rounded-lg">
@@ -32,26 +23,11 @@ export default async function Home() {
 
           {/* Task List */}
           <div className="space-y-3">
-            {tasks.length === 0 ? (
-              <p className="text-center text-muted-foreground">No tasks yet. Add one above!</p>
-            ) : (
-              <SortableTaskList tasks={tasks} />
-            )}
-          </div>
-
-          {/* Task Counters */}
-          <div className="mt-6 text-sm text-muted-foreground flex justify-between">
-            <span>Active: {activeTasks}</span>
-            <span>Completed: {completedTasks}</span>
+            <SortableTaskList />
           </div>
         </CardContent>
       </Card>
     </div>
   )
 }
-
-
-
-
-
 
