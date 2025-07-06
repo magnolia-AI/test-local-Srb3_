@@ -22,7 +22,6 @@ export default async function Home() {
 
           {/* Task Input Form */}
           <form action={async (formData: FormData) => {
-            'use server'
             const title = formData.get('title') as string
             if (title.trim()) {
               await createTask(title)
