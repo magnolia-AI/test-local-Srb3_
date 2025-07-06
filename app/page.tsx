@@ -1,10 +1,8 @@
-import { getTasks, createTask, updateTask, deleteTask } from '@/app/actions/tasks'
+import { getTasks, createTask } from '@/app/actions/tasks'
 import { Card, CardContent } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
-import { Checkbox } from '@/components/ui/checkbox'
-import { Label } from '@/components/ui/label'
-import { cn } from '@/lib/utils'
+import { TaskItem } from '@/components/task-item'
 
 export default async function Home() {
   const { tasks, success } = await getTasks()
@@ -44,40 +42,7 @@ export default async function Home() {
               <p className="text-center text-muted-foreground">No tasks yet. Add one above!</p>
             ) : (
               tasks.map((task) => (
-                <div
-                  key={task.id}
-                  className="flex items-center justify-between p-3 bg-card rounded-md shadow-sm hover:bg-accent transition-colors"
-                >
-                  <div className="flex items-center gap-3">
-                    <form action={async () => {
-                      'use server'
-                      await updateTask(task.id, { completed: !task.completed })
-                    }}>
-                      <Checkbox
-                        id={`task-${task.id}`}
-                        checked={task.completed}
-                        onCheckedChange={() => { /* Form action handles this */ }}
-                      />
-                    </form>
-                    <Label
-                      htmlFor={`task-${task.id}`}
-                      className={cn(
-                        "text-lg",
-                        task.completed && "line-through text-muted-foreground"
-                      )}
-                    >
-                      {task.title}
-                    </Label>
-                  </div>
-                  <form action={async () => {
-                    'use server'
-                    await deleteTask(task.id)
-                  }}>
-                    <Button variant="ghost" size="sm">
-                      Delete
-                    </Button>
-                  </form>
-                </div>
+                <TaskItem key={task.id} task={task} />
               ))
             )}
           </div>
