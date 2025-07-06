@@ -55,3 +55,50 @@ export async function updateTaskOrder(
   }
 }
 
+
+/**
+ * Creates a new task from form data. This is a server action for forms.
+ * @param formData The form data from the client.
+ * @returns An object with an error message if validation fails.
+ */
+export async function createTaskFormAction(formData: FormData) {
+  const title = formData.get('title') as string;
+
+  if (!title || title.trim().length === 0) {
+    return { error: 'Title is required.' };
+  }
+
+  try {
+    await createTask(title);
+    revalidatePath('/');
+  } catch (error) {
+    return { error: 'Failed to create task.' };
+  }
+}
+
+/**
+ * Creates a new task.
+ * @param title The title of the task.
+ * @returns An ActionResult indicating success or failure.
+ */
+export async function createTask(title: string): Promise<ActionResult<Task>> {
+  try {
+    const lastTask = await prisma.task.findFirst({
+      orderBy: { order: 'desc' },
+    });
+
+    const newOrder = lastTask ? lastTask.order + 1 : 0;
+
+    const task = await prisma.task.create({
+      data: {
+        title,
+        order: newOrder,
+      },
+    });
+    return { success: true, data: task };
+  } catch (error) {
+    console.error('Failed to create task:', error);
+    return { success: false, error: 'Failed to create task.' };
+  }
+}
+

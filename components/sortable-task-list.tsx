@@ -17,7 +17,7 @@ import {
 } from '@dnd-kit/sortable';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { getTasks, updateTaskOrder } from '@/app/actions/tasks';
-import { SortableTaskItem } from './sortable-task-item';
+import { TaskItem } from './task-item';
 import { Task } from '@prisma/client';
 import { Skeleton } from '@/components/ui/skeleton';
 import { ActionResult } from '@/app/actions/types';
@@ -118,11 +118,13 @@ export function SortableTaskList() {
       >
         <div className="space-y-2">
           {tasks?.map((task) => (
-            <SortableTaskItem key={task.id} task={task} />
+            <TaskItem key={task.id} task={task} />
           ))}
         </div>
       </SortableContext>
     </DndContext>
   );
 }
+
+
 

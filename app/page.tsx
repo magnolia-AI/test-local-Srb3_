@@ -1,4 +1,4 @@
-import { createTaskFromForm } from '@/app/actions/tasks'
+import { createTaskFormAction } from '@/app/actions/tasks'
 import { Card, CardContent } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
@@ -12,7 +12,7 @@ export default function Home() {
           <h1 className="text-3xl font-bold text-center mb-6">Todo App</h1>
 
           {/* Task Input Form */}
-          <form action={createTaskFromForm} className="flex gap-2 mb-6">
+          <form action={createTaskFormAction} className="flex gap-2 mb-6">
             <Input
               name="title"
               placeholder="Add a new task..."
@@ -30,4 +30,6 @@ export default function Home() {
     </div>
   )
 }
+
+
 
