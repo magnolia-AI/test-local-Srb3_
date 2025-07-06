@@ -1,6 +1,8 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
 generator client {
-  provider        = "prisma-client-js"
-  previewFeatures = ["driverAdapters"]
+  provider = "prisma-client-js"
 }
 
 datasource db {
@@ -9,14 +11,11 @@ datasource db {
 }
 
 model Task {
-  id        String    @id @default(uuid())
+  id        String   @id @default(cuid())
   title     String
-  completed Boolean   @default(false)
-  order     Int       @default(0)
-  category  String?
-  dueDate   DateTime?
-  priority  String?   @default("medium") // e.g., "low", "medium", "high"
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
+  completed Boolean  @default(false)
+  order     Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
